@@ -21,6 +21,7 @@ jobs:
              yes $'\n'|pacman -Syu base-devel unzip p7zip busybox rclone git
              sed -i '/E_ROOT/d' /usr/bin/makepkg
              echo 'PACKAGER="Alexhhh bot <alex-hhh@qq.com>"' >> /etc/makepkg.conf
+
     - name: Prepare rclone
       run:  |
              mkdir -p ~/.config/rclone/
