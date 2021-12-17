@@ -31,13 +31,12 @@ jobs:
     - name: PkgBuild
       run:  |
              mkdir works && cd works
-             export pn = '${{ github.event.inputs.packageName }}'
-             git clone 'https://aur.archlinux.org/${pn}'
-             cd ./${pn}
+             git clone 'https://aur.archlinux.org/${{ github.event.inputs.packageName }}'
+             cd ./${{ github.event.inputs.packageName }}
              makepkg -sf --noconfirm
              cp *.pkg.tar.zst ../
              cd ../
-             rm -r ./${pn}
+             rm -r ./${{ github.event.inputs.packageName }}
              
     - name: Upload package(s)
       run:  |
