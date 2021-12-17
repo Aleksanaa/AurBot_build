@@ -1,0 +1,48 @@
+name: build
+on:
+  workflow_dispatch:
+    inputs:
+      packageName:
+        description: 'The actual name of the package you want to build'
+        required: true
+        
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux
+      options: --privileged
+      volumes:
+        - /sys/fs/cgroup:/sys/fs/cgroup
+
+    steps:
+    - name: Prepare environment
+      run:  |
+             yes $'\n'|pacman -Syu base-devel unzip p7zip busybox rclone git
+             sed -i '/E_ROOT/d' /usr/bin/makepkg
+             echo 'PACKAGER="Alexhhh bot <alex-hhh@qq.com>"' >> /etc/makepkg.conf
+    - name: Prepare rclone
+      run:  |
+             mkdir -p ~/.config/rclone/
+             touch ~/.config/rclone/rclone.conf
+             echo -e '${{secrets.ONEDRIVE_CONFIG}}' >> ~/.config/rclone/rclone.conf
+             
+    - name: PkgBuild
+      run:  |
+      	     mkdir works && cd works
+             export pn = ${{ github.event.inputs.packageName }}
+             git clone 'https://aur.archlinux.org/${{pn}'
+             cd ./${pn}
+             makepkg -sf --noconfirm
+             cp *.pkg.tar.zst ../
+             cd ../
+             rm -r ./${pn}
+             
+    - name: Upload package(s)
+      run:  |
+      	     cd works
+      	     rclone move alexhhh:/Public/Repo/ ./ --include "*.db.tar.gz"
+      	     rclone move alexhhh:/Public/Repo/ ./ --include "*.files.tar.gz"
+      	     repo-add ./alexhhhBot.db.tar.gz ./*.pkg.tar.zst
+             rclone move ./ alexhhh:/Public/Repo  --include "*"
+             
