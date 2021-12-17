@@ -30,7 +30,7 @@ jobs:
              
     - name: PkgBuild
       run:  |
-      	     mkdir works && cd works
+             mkdir works && cd works
              export pn = ${{ github.event.inputs.packageName }}
              git clone 'https://aur.archlinux.org/${{pn}'
              cd ./${pn}
@@ -41,9 +41,9 @@ jobs:
              
     - name: Upload package(s)
       run:  |
-      	     cd works
-      	     rclone move alexhhh:/Public/Repo/ ./ --include "*.db.tar.gz"
-      	     rclone move alexhhh:/Public/Repo/ ./ --include "*.files.tar.gz"
-      	     repo-add ./alexhhhBot.db.tar.gz ./*.pkg.tar.zst
+             cd works
+             rclone move alexhhh:/Public/Repo/ ./ --include "*.db.tar.gz"
+             rclone move alexhhh:/Public/Repo/ ./ --include "*.files.tar.gz"
+             repo-add ./alexhhhBot.db.tar.gz ./*.pkg.tar.zst
              rclone move ./ alexhhh:/Public/Repo  --include "*"
              
