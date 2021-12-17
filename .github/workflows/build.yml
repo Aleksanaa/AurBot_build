@@ -31,7 +31,7 @@ jobs:
     - name: PkgBuild
       run:  |
              mkdir works && cd works
-             export pn = ${{ github.event.inputs.packageName }}
+             export pn = '${{ github.event.inputs.packageName }}'
              git clone 'https://aur.archlinux.org/${pn}'
              cd ./${pn}
              makepkg -sf --noconfirm
