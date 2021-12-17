@@ -32,7 +32,7 @@ jobs:
       run:  |
              mkdir works && cd works
              export pn = ${{ github.event.inputs.packageName }}
-             git clone 'https://aur.archlinux.org/${{pn}'
+             git clone 'https://aur.archlinux.org/${pn}'
              cd ./${pn}
              makepkg -sf --noconfirm
              cp *.pkg.tar.zst ../
