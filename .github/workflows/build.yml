@@ -46,6 +46,7 @@ jobs:
     - name: Upload package(s)
       run:  |
              cd works
+             #fuck this up
              while [[ -n $(rclone ls alexhhh:/Public/Repo | grep "_lock") ]]
              do
                sleep 5
@@ -55,5 +56,9 @@ jobs:
              rclone copy alexhhh:/Public/Repo/ ./ --include "*.db.tar.gz"
              rclone copy alexhhh:/Public/Repo/ ./ --include "*.files.tar.gz"
              repo-add ./alexhhhBot.db.tar.gz ./*.pkg.tar.zst
-             rclone move ./ alexhhh:/Public/Repo  --include "*" --copy-links
+             #rclone has some problems with symlinks even with --copy-links
+             rm -r alexhhhBot.db alexhhhBot.files
+             cp alexhhhBot.db.tar.gz alexhhhBot.db
+             cp alexhhhBot.files.tar.gz alexhhhBot.files
+             rclone move ./ alexhhh:/Public/Repo  --include "*"
              rclone delete alexhhh:/Public/Repo/114514lock
