@@ -19,8 +19,14 @@ jobs:
     - name: Prepare environment
       run:  |
              yes $'\n'|pacman -Syu base-devel unzip p7zip busybox rclone git
+             # unlock the limitation of makepkg
              sed -i '/E_ROOT/d' /usr/bin/makepkg
-             echo 'PACKAGER="Alexhhh bot <alex-hhh@qq.com>"' >> /etc/makepkg.conf
+             # deal with signatures
+             echo 'PACKAGER="Alexhhh-bot <alex-hhh@qq.com>"' >> /etc/makepkg.conf
+             echo '${{secrets.GPG_PRIVATE_KEY}}' >> private-file.key
+             chmod 600 private-file.key
+             pacman-key -a private-file.key
+             rm -r private-file.key
 
     - name: Prepare rclone
       run:  |
@@ -33,7 +39,7 @@ jobs:
              mkdir works && cd works
              git clone 'https://aur.archlinux.org/${{ github.event.inputs.packageName }}'
              cd ./${{ github.event.inputs.packageName }}
-             makepkg -sf --noconfirm
+             makepkg -sf --noconfirm --sign 7737C174A7899F3D870D1EC8C45BE3817C9F5E15
              cp *.pkg.tar.zst ../
              cd ../
              rm -r ./${{ github.event.inputs.packageName }}
@@ -44,5 +50,5 @@ jobs:
              rclone move alexhhh:/Public/Repo/ ./ --include "*.db.tar.gz"
              rclone move alexhhh:/Public/Repo/ ./ --include "*.files.tar.gz"
              repo-add ./alexhhhBot.db.tar.gz ./*.pkg.tar.zst
-             rclone move ./ alexhhh:/Public/Repo  --include "*"
+             rclone move ./ alexhhh:/Public/Repo  --include "*" --copy-links
              
