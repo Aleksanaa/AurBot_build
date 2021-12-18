@@ -46,8 +46,13 @@ jobs:
     - name: Upload package(s)
       run:  |
              cd works
-             rclone move alexhhh:/Public/Repo/ ./ --include "*.db.tar.gz"
-             rclone move alexhhh:/Public/Repo/ ./ --include "*.files.tar.gz"
+             while (( -n $(rclone ls alexhhh:/Public/Repo | grep "_lock") ))
+             do
+               sleep 5
+             done
+             rclone touch alexhhh:/Public/Repo/_lock
+             rclone copy alexhhh:/Public/Repo/ ./ --include "*.db.tar.gz"
+             rclone copy alexhhh:/Public/Repo/ ./ --include "*.files.tar.gz"
              repo-add ./alexhhhBot.db.tar.gz ./*.pkg.tar.zst
              rclone move ./ alexhhh:/Public/Repo  --include "*" --copy-links
-             
+             rclone delete alexhhh:/Public/Repo/_lock
