@@ -46,12 +46,13 @@ jobs:
     - name: Upload package(s)
       run:  |
              cd works
+             rclone copy ./ alexhhh:/Public/Repo/ --include "*.pkg.tar.zst*"
              #fuck this up
              while [[ -n $(rclone ls alexhhh:/Public/Repo | grep "_lock") ]]
              do
                sleep 5
              done
-             touch 114514lock
+             echo -e "${{ github.event.inputs.packageName }},$(date)" >> 114514lock
              rclone move ./114514lock alexhhh:/Public/Repo/
              rclone copy alexhhh:/Public/Repo/ ./ --include "*.db.tar.gz"
              rclone copy alexhhh:/Public/Repo/ ./ --include "*.files.tar.gz"
@@ -60,5 +61,6 @@ jobs:
              rm -r alexhhhBot.db alexhhhBot.files
              cp alexhhhBot.db.tar.gz alexhhhBot.db
              cp alexhhhBot.files.tar.gz alexhhhBot.files
-             rclone move ./ alexhhh:/Public/Repo  --include "*"
+             rclone move ./ alexhhh:/Public/Repo  --include "*.db*"
+             rclone move ./ alexhhh:/Public/Repo  --include "*.files*"
              rclone delete alexhhh:/Public/Repo/114514lock
