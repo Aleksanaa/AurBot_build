@@ -24,8 +24,7 @@ jobs:
              # deal with signatures
              echo 'PACKAGER="Alexhhh-bot <alex-hhh@qq.com>"' >> /etc/makepkg.conf
              echo '${{secrets.GPG_PRIVATE_KEY}}' >> private-file.key
-             chmod 600 private-file.key
-             pacman-key -a private-file.key
+             gpg --import private-file.key
              rm -r private-file.key
 
     - name: Prepare rclone
