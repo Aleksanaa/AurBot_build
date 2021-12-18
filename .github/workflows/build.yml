@@ -56,4 +56,4 @@ jobs:
              rclone copy alexhhh:/Public/Repo/ ./ --include "*.files.tar.gz"
              repo-add ./alexhhhBot.db.tar.gz ./*.pkg.tar.zst
              rclone move ./ alexhhh:/Public/Repo  --include "*" --copy-links
-             rclone delete alexhhh:/Public/Repo/_lock
+             rclone delete alexhhh:/Public/Repo/114514lock
