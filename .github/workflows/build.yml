@@ -50,7 +50,8 @@ jobs:
              do
                sleep 5
              done
-             rclone touch alexhhh:/Public/Repo/_lock
+             touch _lock
+             rclone move ./_lock alexhhh:/Public/Repo/
              rclone copy alexhhh:/Public/Repo/ ./ --include "*.db.tar.gz"
              rclone copy alexhhh:/Public/Repo/ ./ --include "*.files.tar.gz"
              repo-add ./alexhhhBot.db.tar.gz ./*.pkg.tar.zst
