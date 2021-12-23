@@ -47,6 +47,8 @@ jobs:
       run:  |
              cd works
              rclone copy ./ alexhhh:/Public/Repo/ --include "*.pkg.tar.zst*"
+             echo $(ls *.pkg.tar.zst*) >> ${{ env.GITHUB_RUN_NUMBER	}}.txt
+             rclone move ./${{ env.GITHUB_RUN_NUMBER	}}.txt alexhhh:/Public/Repo/logs/
              #fuck this up
              while [[ -n $(rclone ls alexhhh:/Public/Repo | grep "_lock") ]]
              do
