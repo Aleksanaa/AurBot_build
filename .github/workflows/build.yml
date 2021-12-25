@@ -26,7 +26,7 @@ jobs:
              echo '${{secrets.GPG_PRIVATE_KEY}}' >> private-file.key
              gpg --import private-file.key
              rm -r private-file.key
-             pacman-key -r C45BE3817C9F5E15 --keyserver pgp.mit.edu
+             gpg -a --export 7737C174A7899F3D870D1EC8C45BE3817C9F5E15 | pacman-key --add -
 
     - name: Prepare rclone
       run:  |
