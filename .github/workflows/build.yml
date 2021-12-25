@@ -27,6 +27,7 @@ jobs:
              gpg --import private-file.key
              rm -r private-file.key
              gpg -a --export 7737C174A7899F3D870D1EC8C45BE3817C9F5E15 | pacman-key --add -
+             pacman-key --lsign C45BE3817C9F5E15
 
     - name: Prepare rclone
       run:  |
