@@ -39,7 +39,7 @@ jobs:
                git clone https://aur.archlinux.org/$1.git
                cd ./$1
                source ./PKGBUILD
-               Alldepends = {${depends[@]} ${makedepends[@]}}
+               Alldepends=(${depends[@]} ${makedepends[@]})
                for package in ${Alldepends[@]};do
                  if [pacman -S ${package} --noconfirm --needed];then
                    cd ../
