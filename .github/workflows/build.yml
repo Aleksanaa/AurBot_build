@@ -26,6 +26,7 @@ jobs:
              echo '${{secrets.GPG_PRIVATE_KEY}}' >> private-file.key
              gpg --import private-file.key
              rm -r private-file.key
+             pacman-key -r C45BE3817C9F5E15 --keyserver pgp.mit.edu
 
     - name: Prepare rclone
       run:  |
@@ -42,10 +43,13 @@ jobs:
                Alldepends=(${depends[@]} ${makedepends[@]})
                for package in ${Alldepends[@]};do
                  if pacman -S ${package} --noconfirm --needed ;then
+                   echo -e 'dependency ${package} satisfied'
+                 else
                    cd ../
                    buildPackage ${package}
                    pacman -U ./${package}*.pkg.tar.zst --noconfirm
                    cd ./$1
+                   echo -e 'dependency ${package} built from aur satisfied'
                  fi
                done
                makepkg -d -f --noconfirm --skippgpcheck --sign 7737C174A7899F3D870D1EC8C45BE3817C9F5E15
