@@ -35,15 +35,26 @@ jobs:
              
     - name: PkgBuild
       run:  |
+             buildPackage(){
+               git clone https://aur.archlinux.org/$1.git
+               cd ./$1
+               source ./PKGBUILD
+               Alldepends = {${depends[@]} ${makedepends[@]}}
+               for package in ${Alldepends[@]};do
+                 if [pacman -S ${package} --noconfirm --needed];then
+                   cd ../
+                   buildPackage ${package}
+                   pacman -U ./${package}*.pkg.tar.zst --noconfirm
+                   cd ./$1
+                 fi
+               done
+               makepkg -d -f --noconfirm --skippgpcheck --sign 7737C174A7899F3D870D1EC8C45BE3817C9F5E15
+               cp *.pkg.tar.zst* ../
+               cd ../
+               rm -r ./$1
+             }
              mkdir works && cd works
-             git clone 'https://aur.archlinux.org/${{ github.event.inputs.packageName }}'
-             cd ./${{ github.event.inputs.packageName }}
-             source ./PKGBUILD
-             pacman -S ${makedepends[@]} --noconfirm
-             makepkg -d -f --noconfirm --skippgpcheck --sign 7737C174A7899F3D870D1EC8C45BE3817C9F5E15
-             cp *.pkg.tar.zst* ../
-             cd ../
-             rm -r ./${{ github.event.inputs.packageName }}
+             buildPackage ${{ github.event.inputs.packageName }}
              
     - name: Upload package(s)
       run:  |
