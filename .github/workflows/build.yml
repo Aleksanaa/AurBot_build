@@ -41,6 +41,7 @@ jobs:
                cd ./$1
                source ./PKGBUILD
                Alldepends=(${depends[@]} ${makedepends[@]})
+               local package
                for package in ${Alldepends[@]};do
                  if pacman -S ${package} --noconfirm --needed ;then
                    echo -e 'dependency ${package} satisfied'
