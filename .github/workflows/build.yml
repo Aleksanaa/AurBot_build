@@ -41,7 +41,7 @@ jobs:
                source ./PKGBUILD
                Alldepends=(${depends[@]} ${makedepends[@]})
                for package in ${Alldepends[@]};do
-                 if [pacman -S ${package} --noconfirm --needed];then
+                 if pacman -S ${package} --noconfirm --needed ;then
                    cd ../
                    buildPackage ${package}
                    pacman -U ./${package}*.pkg.tar.zst --noconfirm
