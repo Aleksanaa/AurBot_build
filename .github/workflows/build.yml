@@ -39,7 +39,7 @@ jobs:
              git clone 'https://aur.archlinux.org/${{ github.event.inputs.packageName }}'
              cd ./${{ github.event.inputs.packageName }}
              source ./PKGBUILD
-             pacman -S ${makedepends} --noconfirm
+             pacman -S ${makedepends[@]} --noconfirm
              makepkg -d -f --noconfirm --skippgpcheck --sign 7737C174A7899F3D870D1EC8C45BE3817C9F5E15
              cp *.pkg.tar.zst* ../
              cd ../
