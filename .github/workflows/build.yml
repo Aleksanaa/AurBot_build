@@ -62,7 +62,13 @@ jobs:
              }
              mkdir works && cd works
              buildPackage ${{ github.event.inputs.packageName }}
-             
+    - name: Print sums
+      run:  |
+             cd works
+             for file in ./*
+             do
+               sha256sum $file
+             done
     - name: Upload package(s)
       run:  |
              cd works
