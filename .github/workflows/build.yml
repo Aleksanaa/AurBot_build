@@ -18,7 +18,7 @@ jobs:
     steps:
     - name: Prepare environment
       run:  |
-             yes $'\n'|pacman -Syu base-devel unzip p7zip busybox rclone git
+             yes $'\n'|pacman -Syu base-devel unzip p7zip busybox rclone git --needed
              # unlock the limitation of makepkg
              sed -i '/E_ROOT/d' /usr/bin/makepkg
              # deal with signatures
